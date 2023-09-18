@@ -1,7 +1,10 @@
 const pg = require('pg');
 const client = new pg.Client('postgres://localhost/petshop_backend_db');
+const cors = require('cors');
 const express = require('express');
 const app = express();
+
+app.use(cors());
 
 app.get('/api/pets', async (req, res, next) => {
     try {
@@ -24,12 +27,13 @@ const setup = async () => {
         DROP TABLE IF EXISTS pets;
         CREATE TABLE pets(
             id SERIAL PRIMARY KEY,
-            name VARCHAR(20)
+            name VARCHAR(20),
+            is_favorite BOOLEAN
         );
-        INSERT INTO pets (name) VALUES ('Max');
+        INSERT INTO pets (name, is_favorite) VALUES ('Max', true);
         INSERT INTO pets (name) VALUES ('Cooper');
         INSERT INTO pets (name) VALUES ('Coco');
-        INSERT INTO pets (name) VALUES ('Lola');
+        INSERT INTO pets (name, is_favorite) VALUES ('Lola', true);
     `;
     await client.query(SQL);
     console.log('tables created and data seeded');
